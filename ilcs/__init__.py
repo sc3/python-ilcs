@@ -51,6 +51,13 @@ class ILCSSection(BaseSection):
 
 
 class ILRSSection(BaseSection):
+    def __init__(self, **kwargs):
+        super(ILRSSection, self).__init__(**kwargs)
+
+        # Some data files may specify chapter "56 1/2" as "56.5".
+        # Try to handle this gracefully.
+        self.chapter = self.chapter.replace(".5", " 1/2")
+
     def __repr__(self):
         return "<ILRSSection:{}>".format(str(self))
 

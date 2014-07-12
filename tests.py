@@ -13,6 +13,12 @@ class ILCSSectionTestCase(TestCase):
         self.assertEqual(str(s1), "5 ILCS 20/1")
 
 
+class ILRSSectionTestCase(TestCase):
+    def test_replace_half_chapters(self):
+        s = ilcs.ILRSSection(chapter="56.5", paragraph="704")
+        self.assertEqual(s.chapter, "56 1/2")
+
+
 class ModuleGlobalsTestCase(TestCase):
     def test_sections_auto_loaded(self):
         self.assertEqual(len(ilcs.sections), 45561) 
