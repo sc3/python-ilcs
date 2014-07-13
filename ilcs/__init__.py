@@ -10,6 +10,21 @@ class BaseSection(object):
             self.__dict__[k] = v
 
 class ILCSSection(BaseSection):
+    """
+    A section of the Illinois Compiled Statutes (ILCS).
+
+    Args:
+        chapter (str): Chapter number of the section.
+        act_prefix (str): Act prefix number of the section.
+        section (str): Section number within the chapter and act.
+
+    Attributes:
+        chapter (str): Chapter number of the section.
+        act_prefix (str): Act prefix number of the section.
+        section (str): Section number within the chapter and act.
+
+    """
+
     def __repr__(self):
         return "<ILCSSection:{}>".format(str(self))
 
@@ -51,6 +66,18 @@ class ILCSSection(BaseSection):
 
 
 class ILRSSection(BaseSection):
+    """
+    A section of the Illinois Revised Statutes (ILRS).
+
+    Args:
+        chapter (str): Chapter number of the section.
+        paragraph (str): Paragraph number of the section.
+
+    Attributes:
+        chapter (str): Chapter number of the section.
+        paragraph (str): Paragraph number of the section.
+
+    """
     def __init__(self, **kwargs):
         super(ILRSSection, self).__init__(**kwargs)
 
@@ -93,6 +120,19 @@ class ILRSSection(BaseSection):
 
 
 def load_sections(filename=None):
+    """
+    Populate list of sections and ILRS to ILCS crosswalk from data file
+    
+    Args:
+        filename (str): Filename of data file containing the section
+            definitions.  Defaults to ``{package_dir}/data/ilrs2ilcs.csv``.
+
+    Returns:
+        Tuple where the first value is a list of all ILCS sections and the 
+        second value is a dictionary mapping ILRSSection objects to their
+        corresponding ILCSSection objects.
+
+    """
     sections = []
     ilcs_seen = set()
     ilrs_to_ilcs = {}
@@ -126,6 +166,22 @@ def load_sections(filename=None):
 
 
 def lookup_by_ilrs(chapter, paragraph):
+    """
+    Look up an ILCS section based on its corresponding ILRS section.
+
+    Args:
+        chapter (str): Chapter number of ILRS chapter.
+        paragraph (str): Paragraph number of ILRS chapter.
+
+    Returns:
+        ILCSSection object corresponding to the chapter and paragraph
+        of the ILRS section.
+
+    Raises:
+        KeyError if an ILCS section matching the ILRS chapter and
+        paragraph doesn't exist.
+
+    """
     ilrs_section = ILRSSection(chapter=chapter, paragraph=paragraph)
     return ilrs_to_ilcs[ilrs_section]
 
